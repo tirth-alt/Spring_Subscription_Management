@@ -1,0 +1,45 @@
+/* ===== Documents ===== */
+.file-info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-weight: 500;
+}
+
+.file-icon {
+    font-size: 1.25rem;
+    background: var(--bg-secondary);
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius);
+}
+
+.action-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.action-buttons .btn {
+    padding: 0.25rem 0.75rem;
+    font-size: 0.85rem;
+}
+
+.upload-section {
+    border: 1px dashed var(--border-color);
+    transition: var(--transition);
+}
+
+.upload-section:hover {
+    border-color: var(--accent);
+    background: var(--bg-tertiary) !important;
+}
+
+/* Document type badge */
+td:nth-child(2) {
+    text-transform: capitalize;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}

@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Subscription Platform - Manage your subscriptions easily">
+    <title>Subscription Platform</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/documents.css">
+    <link rel="stylesheet" href="css/admin.css">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Navigation - Rounded Pill Style -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <div class="logo" onclick="goHome()">
+                <span class="logo-icon">◆</span>
+                <span class="logo-text">SubsPlat</span>
+            </div>
+            <div class="nav-links" id="navLinks">
+                <a href="#home" onclick="goHome(); return false;">Home</a>
+                <a href="#plans" onclick="scrollToPlans(); return false;">Plans</a>
+                <a href="#features">Features</a>
+            </div>
+            <div class="nav-auth" id="authButtons">
+                <button class="btn btn-outline" onclick="showModal('login')">Login</button>
+                <button class="btn btn-primary" onclick="showModal('register')">Sign Up</button>
+            </div>
+            <div class="nav-user" id="userMenu" style="display: none;">
+                <div class="user-dropdown">
+                    <button class="user-btn" onclick="toggleUserDropdown()">
+                        <span id="userInitial">U</span>
+                    </button>
+                    <div class="dropdown-menu" id="dropdownMenu">
+                        <a href="#dashboard" onclick="showDashboard(); return false;">My Subscriptions</a>
+                        <a href="#admin" id="adminLink" onclick="showAdminDashboard(); return false;"
+                            style="display: none;">Admin Panel</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#profile" onclick="showProfile(); return false;">Profile</a>
+                        <a href="#" onclick="logout(); return false;">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>Subscription Management<br><span class="highlight">Made Simple</span></h1>
+            <p>Streamline your subscription business with our powerful platform. Easy to use, secure, and reliable.</p>
+            <div class="hero-buttons" id="heroButtons">
+                <button class="btn btn-primary btn-lg" id="getStartedBtn" onclick="showModal('register')">Get
+                    Started</button>
+                <button class="btn btn-outline btn-lg" onclick="scrollToPlans()">View Plans</button>
+                <button class="btn btn-primary btn-lg" id="mySubsBtn" onclick="showDashboard()"
+                    style="display: none;">My Subscriptions</button>
+            </div>
+        </div>
+        <div class="hero-graphic">
+            <div class="graphic-box">
+                <div class="graphic-line"></div>
+                <div class="graphic-line"></div>
+                <div class="graphic-line"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Plans Section -->
+    <section id="plans" class="plans-section">
+        <div class="section-header">
+            <h2>Choose Your Plan</h2>
+            <p>Select the perfect plan for your needs</p>
+        </div>
+        <div class="plans-container" id="plansContainer">
+            <div class="loading">Loading plans...</div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features-section">
+        <div class="section-header">
+            <h2>Why Choose Us</h2>
+            <p>Powerful features to manage your subscriptions</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">◈</div>
+                <h3>Easy Management</h3>
+                <p>Manage all your subscriptions from a single dashboard. Simple and intuitive interface.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">◉</div>
+                <h3>Secure Payments</h3>
+                <p>All transactions are encrypted and secured. We partner with trusted payment providers.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">◎</div>
+                <h3>Real-time Analytics</h3>
+                <p>Track your subscription performance with detailed analytics and insights.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">◊</div>
+                <h3>Flexible Plans</h3>
+                <p>Upgrade, downgrade, or cancel anytime. No hidden fees or long-term commitments.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- User Dashboard Section -->
+    <section id="dashboard" class="dashboard-section" style="display: none;">
+        <div class="dashboard-header">
+            <h2>My Subscriptions</h2>
+            <p>Welcome back, <span id="dashboardUserName">User</span>!</p>
+        </div>
+
+        <!-- Dashboard Stats -->
+        <div class="dashboard-stats">
+            <div class="stat-card">
+                <div class="stat-icon">◆</div>
+                <div class="stat-info">
+                    <h4 id="statPlan">No Plan</h4>
+                    <p>Current Plan</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">◈</div>
+                <div class="stat-info">
+                    <h4 id="statStatus">Inactive</h4>
+                    <p>Status</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">◉</div>
+                <div class="stat-info">
+                    <h4 id="statRenewal">N/A</h4>
+                    <p>Next Renewal</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">◎</div>
+                <div class="stat-info">
+                    <h4 id="statHistory">0</h4>
+                    <p>Total Subscriptions</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="dashboard-content">
+            <div class="dashboard-card">
+                <h3>Current Subscription</h3>
+                <div id="currentSubscription">
+                    <p class="no-subscription">No active subscription</p>
+                </div>
+                <button class="btn btn-primary" onclick="scrollToPlans(); goHome();" style="margin-top: 1rem;">Browse
+                    Plans</button>
+            </div>
+            <div class="dashboard-card">
+                <h3>Subscription History</h3>
+                <div id="subscriptionHistory">
+                    <p class="no-history">No subscription history</p>
+                </div>
+            </div>
+
+            <!-- Documents Section -->
+            <div class="dashboard-card full-width" style="margin-top: 2rem;">
+                <div class="card-header">
+                    <h3>My Documents</h3>
+                    <button class="btn btn-primary btn-sm" onclick="Documents.loadDocuments()">Refresh</button>
+                </div>
+
+                <!-- Upload Form -->
+                <div class="upload-section"
+                    style="margin-bottom: 2rem; background: var(--bg-secondary); padding: 1.5rem; border-radius: var(--radius);">
+                    <h4>Upload New Document</h4>
+                    <form id="uploadDocumentForm"
+                        style="display: flex; gap: 1rem; align-items: flex-end; margin-top: 1rem;">
+                        <div class="form-group" style="flex: 1;">
+                            <label for="documentFile">Select File</label>
+                            <input type="file" id="documentFile" required>
+                        </div>
+                        <div class="form-group" style="width: 200px;">
+                            <label for="documentType">Document Type</label>
+                            <select id="documentType">
+                                <option value="INVOICE">Invoice</option>
+                                <option value="ID_PROOF">ID Proof</option>
+                                <option value="OTHER">Other</option>
+                            </select>
+                        </div>
+                        <button type="submit" id="uploadBtn" class="btn btn-primary"
+                            style="margin-bottom: 2px;">Upload</button>
+                    </form>
+                </div>
+
+                <!-- Documents List -->
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>File Name</th>
+                                <th>Type</th>
+                                <th>Date</th>
+                                <th>Size</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="documentsList">
+                            <tr>
+                                <td colspan="5" class="loading">Loading documents...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+            <h3>Quick Actions</h3>
+            <div class="actions-grid">
+                <button class="action-btn" onclick="scrollToPlans(); goHome();">
+                    <span class="action-icon">◆</span>
+                    <span>View Plans</span>
+                </button>
+                <button class="action-btn" onclick="showProfile()">
+                    <span class="action-icon">◈</span>
+                    <span>Edit Profile</span>
+                </button>
+                <button class="action-btn" onclick="Dashboard.loadSubscriptionHistory()">
+                    <span class="action-icon">◉</span>
+                    <span>Refresh History</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Admin Dashboard Section -->
+    <section id="adminDashboard" class="admin-section" style="display: none;">
+        <div class="dashboard-header">
+            <h2>Admin Dashboard</h2>
+            <p>Manage your platform</p>
+        </div>
+
+        <!-- Admin Stats -->
+        <div class="dashboard-stats">
+            <div class="stat-card">
+                <div class="stat-icon">◆</div>
+                <div class="stat-info">
+                    <h4 id="adminTotalUsers">0</h4>
+                    <p>Total Users</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">◈</div>
+                <div class="stat-info">
+                    <h4 id="adminTotalPlans">0</h4>
+                    <p>Active Plans</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">◉</div>
+                <div class="stat-info">
+                    <h4 id="adminActiveSubscriptions">0</h4>
+                    <p>Active Subscriptions</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">◎</div>
+                <div class="stat-info">
+                    <h4 id="adminRevenue">₹0</h4>
+                    <p>This Month Revenue</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">◉</div>
+                <div class="stat-info">
+                    <h4 id="adminTotalRevenue">₹0</h4>
+                    <p>Total Revenue</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Tabs -->
+        <div class="admin-tabs">
+            <button class="tab-btn active" data-tab="overview" onclick="Admin.switchTab('overview')">Overview</button>
+            <button class="tab-btn" data-tab="users" onclick="Admin.switchTab('users')">Users</button>
+            <button class="tab-btn" data-tab="plans" onclick="Admin.switchTab('plans')">Plans</button>
+            <button class="tab-btn" data-tab="analytics" onclick="Admin.switchTab('analytics')">Analytics</button>
+        </div>
+
+        <!-- Overview Tab Content -->
+        <div id="overviewTab" class="tab-content active">
+            <div id="overviewContent"></div>
+        </div>
+
+        <!-- Users Tab Content -->
+        <div id="usersTab" class="tab-content">
+            <div class="dashboard-card full-width">
+                <div class="card-header">
+                    <h3>All Users</h3>
+                    <button class="btn btn-outline btn-sm" onclick="Admin.loadUsers()">Refresh</button>
+                </div>
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Created</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersTableBody">
+                            <tr>
+                                <td colspan="5" class="loading">Loading users...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Plans Tab Content -->
+        <div id="plansTab" class="tab-content">
+            <div class="dashboard-card full-width">
+                <div class="card-header">
+                    <h3>All Plans</h3>
+                    <div class="card-actions">
+                        <button class="btn btn-outline btn-sm" onclick="Admin.loadPlans()">Refresh</button>
+                        <button class="btn btn-primary btn-sm" onclick="Admin.showCreatePlanModal()">+ New Plan</button>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Price</th>
+                                <th>Billing</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="plansTableBody">
+                            <tr>
+                                <td colspan="6" class="loading">Loading plans...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Analytics Tab Content -->
+        <div id="analyticsTab" class="tab-content">
+            <div id="analyticsContent"></div>
+        </div>
+    </section>
+
+    <!-- Profile Section -->
+    <section id="profile" class="profile-section" style="display: none;">
+        <div class="profile-header">
+            <h2>Profile</h2>
+            <p>Manage your account</p>
+        </div>
+        <div class="profile-content">
+            <div class="profile-card">
+                <div class="profile-avatar">
+                    <span id="profileInitial">U</span>
+                </div>
+                <form id="profileForm">
+                    <div class="form-group">
+                        <label for="profileEmail">Email</label>
+                        <input type="email" id="profileEmail" disabled>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="profileFirstName">First Name</label>
+                            <input type="text" id="profileFirstName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="profileLastName">Last Name</label>
+                            <input type="text" id="profileLastName" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Role</label>
+                        <input type="text" id="profileRole" disabled>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Update Profile</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="footer">
+        <div class="footer-content">
+            <div class="footer-logo">
+                <span class="logo-icon">◆</span>
+                <span class="logo-text">SubsPlat</span>
+            </div>
+            <p>© 2026 Subscription Platform. All rights reserved.</p>
+            <p class="footer-contact">Having issues? <a
+                    href="mailto:abhigandhi7000@gmail.com?subject=Support Request - Subscription Platform">Contact
+                    Support</a></p>
+        </div>
+    </footer>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="hideModal('login')">&times;</span>
+            <h2>Login</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="loginEmail">Email</label>
+                    <input type="email" id="loginEmail" required placeholder="Enter your email">
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" required placeholder="Enter your password">
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Login</button>
+                <p class="form-footer">
+                    Don't have an account? <a href="#" onclick="switchModal('register')">Sign up</a>
+                </p>
+            </form>
+            <div id="loginError" class="error-message"></div>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="hideModal('register')">&times;</span>
+            <h2>Sign Up</h2>
+            <form id="registerForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="registerFirstName">First Name</label>
+                        <input type="text" id="registerFirstName" required placeholder="First name">
+                    </div>
+                    <div class="form-group">
+                        <label for="registerLastName">Last Name</label>
+                        <input type="text" id="registerLastName" required placeholder="Last name">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="registerEmail">Email</label>
+                    <input type="email" id="registerEmail" required placeholder="Enter your email">
+                </div>
+                <div class="form-group">
+                    <label for="registerPassword">Password</label>
+                    <input type="password" id="registerPassword" required minlength="6" placeholder="Create a password">
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Create Account</button>
+                <p class="form-footer">
+                    Already have an account? <a href="#" onclick="switchModal('login')">Login</a>
+                </p>
+            </form>
+            <div id="registerError" class="error-message"></div>
+        </div>
+    </div>
+
+    <!-- Create/Edit Plan Modal -->
+    <div id="createPlanModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="hideModal('createPlan')">&times;</span>
+            <h2>Create New Plan</h2>
+            <form id="createPlanForm">
+                <div class="form-group">
+                    <label for="planName">Plan Name</label>
+                    <input type="text" id="planName" required placeholder="e.g., Basic, Pro, Enterprise">
+                </div>
+                <div class="form-group">
+                    <label for="planDescription">Description</label>
+                    <input type="text" id="planDescription" placeholder="Brief description of the plan">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="planPrice">Price (₹)</label>
+                        <input type="number" id="planPrice" required min="0" step="0.01" placeholder="299">
+                    </div>
+                    <div class="form-group">
+                        <label for="planBillingCycle">Billing Cycle</label>
+                        <select id="planBillingCycle" required>
+                            <option value="MONTHLY">Monthly</option>
+                            <option value="YEARLY">Yearly</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="planFeatures">Features (comma-separated)</label>
+                    <input type="text" id="planFeatures" placeholder="Feature 1, Feature 2, Feature 3">
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Save Plan</button>
+            </form>
+            <div id="createPlanError" class="error-message"></div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <!-- Razorpay Checkout -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+    <!-- JavaScript Modules -->
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/payment.js"></script>
+    <script src="js/plans.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script src="js/documents.js"></script>
+    <script src="js/admin.js"></script>
+    <script src="js/app.js"></script>
+</body>
+
+</html>

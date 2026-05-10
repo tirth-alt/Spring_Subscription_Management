@@ -99,8 +99,7 @@ src/main/java/com/example/subscription_platform/
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/AbhiGandhi02/Spring_Subscription_Platform.git
-cd subscription-platform
+git clone https://github.com/tirth-alt/Spring_Subscription_Management.git
 ```
 
 2. Configure `application.yml`:
